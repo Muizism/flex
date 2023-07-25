@@ -13,7 +13,6 @@ const {
   giveFeedback,
 } = require('../controllers/studentController');
 
-
 studentRouter.get('/check-marks', checkMarks);
 studentRouter.get('/check-attendance', checkAttendance);
 studentRouter.post('/withdraw-course', withdrawCourse);

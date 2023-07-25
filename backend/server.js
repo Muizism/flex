@@ -1,14 +1,13 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const Student = require('./models/student');
-const Course = require('./models/course');
-const Enrollment = require('./models/enrollment');
-const Marks = require('./models/marks');
-const Attendance = require('./models/attendance');
-const Fee = require('./models/fee');
-
+const academicsRoutes = require('./routes/academicRoutes');
+const studentRoutes = require('./routes/studentRoutes');
+const express = require('express');
+app = express();
 dotenv.config();
 
+app.use('/academics', academicsRoutes);
+app.use('/students', studentRoutes);
 
 mongoose
   .connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -18,3 +17,8 @@ mongoose
   .catch((err) => {
     console.error('Error connecting to MongoDB:', err);
   });
+
+  const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
