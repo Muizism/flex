@@ -1,7 +1,30 @@
+const auth = require('../middleware/auth');
 const Student = require('../models/student');
 const Mark = require('../models/marks');
 const Attendance = require('../models/attendance');
 const Course = require('../models/course');
+
+const login = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const student = await Student.findOne({ username });
+
+    if (!student) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+
+    const passwordMatch = await auth.comparePasswords(password, student.hashedPassword);
+
+    if (passwordMatch) {
+      const token = auth.generateToken({ username: student.username });
+      return res.json({ token });
+    } else {
+      return res.status(401).json({ error: 'Authentication failed' });
+    }
+  } catch (error) {
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
 
 const checkMarks = (req, res) => {
@@ -106,4 +129,5 @@ module.exports = {
   checkGrades,
   borrowBook,
   giveFeedback,
+  login,
 };

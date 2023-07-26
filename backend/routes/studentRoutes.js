@@ -1,5 +1,6 @@
 const express = require('express');
 const studentRouter = express.Router();
+const auth = require('../middleware/auth');
 
 
 const {
@@ -11,8 +12,10 @@ const {
   checkGrades,
   borrowBook,
   giveFeedback,
+  login,
 } = require('../controllers/studentController');
 
+studentRouter.post('/login', auth.authenticateToken,login);
 studentRouter.get('/check-marks', checkMarks);
 studentRouter.get('/check-attendance', checkAttendance);
 studentRouter.post('/withdraw-course', withdrawCourse);
