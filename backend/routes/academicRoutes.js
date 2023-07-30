@@ -11,7 +11,7 @@ const {
   login,
 } = require('../controllers/academicsController');
 
-academicsRouter.post('/login',auth.authenticateToken, login);  
+academicsRouter.post('/academic-login',auth.authenticateToken, login);  
 academicsRouter.post('/register-course',auth.authenticateToken, registerCourse);
 academicsRouter.post('/drop-course', dropCourse);
 academicsRouter.post('/change-section', changeSection);

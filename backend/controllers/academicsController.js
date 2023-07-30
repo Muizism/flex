@@ -1,20 +1,20 @@
 const Course = require('../models/course');
-const Student = require('../models/student');
+const academic = require('../models/academic');
 const auth = require('../middleware/auth');
 
 const login = async (req, res) => {
   try {
     const { username, password } = req.body;
-    const student = await Student.findOne({ username });
+    const academic = await academic.findOne({ username });
 
-    if (!student) {
-      return res.status(404).json({ error: 'Student not found' });
+    if (!academic) {
+      return res.status(404).json({ error: 'academic not found' });
     }
 
-    const passwordMatch = await auth.comparePasswords(password, student.hashedPassword);
+    const passwordMatch = await auth.comparePasswords(password, academic.hashedPassword);
 
     if (passwordMatch) {
-      const token = auth.generateToken({ username: student.username });
+      const token = auth.generateToken({ username: academic.username });
       return res.json({ token });
     } else {
       return res.status(401).json({ error: 'Authentication failed' });
@@ -25,20 +25,20 @@ const login = async (req, res) => {
 };
 
 const registerCourse = (req, res) => {
-  const studentId = req.userId || req.params.studentId;
+  const academicId = req.userId || req.params.academicId;
   const courseIdToRegister = req.body.courseId;
 
-  Student.findById(studentId)
-    .then((student) => {
-      if (student.courses.includes(courseIdToRegister)) {
-        return res.status(400).json({ error: 'Student is already registered for this course.' });
+  academic.findById(academicId)
+    .then((academic) => {
+      if (academic.courses.includes(courseIdToRegister)) {
+        return res.status(400).json({ error: 'academic is already registered for this course.' });
       }
 
-      student.courses.push(courseIdToRegister);
-      return student.save();
+      academic.courses.push(courseIdToRegister);
+      return academic.save();
     })
-    .then((updatedStudent) => {
-      res.json(updatedStudent);
+    .then((updatedacademic) => {
+      res.json(updatedacademic);
     })
     .catch((err) => {
       res.status(500).json({ error: 'Failed to register for the course.' });
