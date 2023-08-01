@@ -6,11 +6,6 @@ const adminRoutes = require('./routes/adminRoutes');
 const express = require('express');
 app = express();
 dotenv.config();
-
-app.use('/academics', academicsRoutes);
-app.use('/students', studentRoutes);
-app.use('/admin', adminRoutes);
-
 mongoose
   .connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
@@ -19,6 +14,12 @@ mongoose
   .catch((err) => {
     console.error('Error connecting to MongoDB:', err);
   });
+
+
+app.use('/academics', academicsRoutes);
+app.use('/students', studentRoutes);
+app.use('/admin', adminRoutes);
+
 
   const PORT = 3000;
 app.listen(PORT, () => {
