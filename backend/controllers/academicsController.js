@@ -2,27 +2,41 @@ const Course = require('../models/course');
 const academic = require('../models/academic');
 const auth = require('../middleware/auth');
 
-const login = async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    const academic = await academic.findOne({ username });
+let Login = (req, res) => {
+  let email = req.body.email;
+  let password = req.body.password;
+  
+  academic.findOne({ email: email })
+    .then(user => {
+      if (!user) {
+        return res.status(400).json({"Success": false, 'Message': 'User not found' });
+      }
+      
+      bcrypt.compare(password, user.password, (err, result) => {
+        if (err) {
+          // Handle the error, e.g., log it or return an error response
+          return res.status(500).json({ "Success": false, 'Message': 'Error comparing passwords' });
+        }
 
-    if (!academic) {
-      return res.status(404).json({ error: 'academic not found' });
-    }
+        if (result === true) {
+          // Passwords match, create a JWT token and send the response
+          let token = jwt.sign({
+            email: user.email,
+            _id: user._id,
+          }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    const passwordMatch = await auth.comparePasswords(password, academic.hashedPassword);
-
-    if (passwordMatch) {
-      const token = auth.generateToken({ username: academic.username });
-      return res.json({ token });
-    } else {
-      return res.status(401).json({ error: 'Authentication failed' });
-    }
-  } catch (error) {
-    return res.status(500).json({ error: 'Internal server error' });
-  }
+          return res.status(200).json({"Success": true, user, token, 'Message': 'User logged in successfully' });
+        } else {
+          // Passwords do not match
+          return res.status(400).json({"Success": false, 'Message': 'User login failed' });
+        }
+      });
+    })
+    .catch(err => {
+      res.status(500).json({ "Success": false, 'Message': 'Error finding user' });
+    });
 };
+
 
 const registerCourse = (req, res) => {
   const academicId = req.userId || req.params.academicId;
@@ -154,5 +168,5 @@ module.exports = {
   changeSection,
   provideTimetable,
   provideExamSchedule,
-  login,
+  Login,
 };

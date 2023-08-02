@@ -4,28 +4,43 @@ const Mark = require('../models/marks');
 const Attendance = require('../models/attendance');
 const Course = require('../models/course');
 
-const login = async (req, res) => {
-  console.log("inlogin")
-  try {
-    const { rollNo, password } = req.body;
-    const student = await Student.findOne({ rollNo });
-console.log(student);
-    if (!student) {
-      return res.status(404).json({ error: 'Student not found' });
-    }
+const jwt = require('jsonwebtoken');
 
-    const passwordMatch = await auth.comparePasswords(password, student.hashedPassword);
+const bcrypt = require('bcrypt');
 
-    if (passwordMatch) {
-      const token = auth.generateToken({ rollNo: student.rollNo });
-      return res.json({ token });
-      console.log(token);
-    } else {
-      return res.status(401).json({ error: 'Authentication failed' });
-    }
-  } catch (error) {
-    return res.status(500).json({ error: 'Internal server error' });
-  }
+let Login = (req, res) => {
+  let email = req.body.email;
+  let password = req.body.password;
+  
+  Student.findOne({ email: email })
+    .then(user => {
+      if (!user) {
+        return res.status(400).json({"Success": false, 'Message': 'User not found' });
+      }
+      
+      bcrypt.compare(password, user.password, (err, result) => {
+        if (err) {
+          // Handle the error, e.g., log it or return an error response
+          return res.status(500).json({ "Success": false, 'Message': 'Error comparing passwords' });
+        }
+
+        if (result === true) {
+          // Passwords match, create a JWT token and send the response
+          let token = jwt.sign({
+            email: user.email,
+            _id: user._id,
+          }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+          return res.status(200).json({"Success": true, user, token, 'Message': 'User logged in successfully' });
+        } else {
+          // Passwords do not match
+          return res.status(400).json({"Success": false, 'Message': 'User login failed' });
+        }
+      });
+    })
+    .catch(err => {
+      res.status(500).json({ "Success": false, 'Message': 'Error finding user' });
+    });
 };
 
 
@@ -82,13 +97,6 @@ const payFee = (req, res) => {
 };
 
 
-const bookLibraryRoom = (req, res) => {
-  const studentId = req.userId || req.params.studentId;
-
-  const roomIdToBook = req.body.roomId;
-
-  res.json({ message: 'Library room booked successfully.' });
-};
 
 
 const checkGrades = (req, res) => {
@@ -105,14 +113,6 @@ const checkGrades = (req, res) => {
 };
 
 
-const borrowBook = (req, res) => {
-  const studentId = req.userId || req.params.studentId;
- 
-  const bookIdToBorrow = req.body.bookId;
-
-  res.json({ message: 'Book borrowed successfully.' });
-};
-
 
 const giveFeedback = (req, res) => {
   const studentId = req.userId || req.params.studentId;
@@ -127,9 +127,9 @@ module.exports = {
   checkAttendance,
   withdrawCourse,
   payFee,
-  bookLibraryRoom,
+ 
   checkGrades,
-  borrowBook,
+
   giveFeedback,
-  login,
+  Login,
 };

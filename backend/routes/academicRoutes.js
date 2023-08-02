@@ -8,14 +8,14 @@ const {
   changeSection,
   provideTimetable,
   provideExamSchedule,
-  login,
+  Login,
 } = require('../controllers/academicsController');
 
-academicsRouter.post('/academic-login',auth.authenticateToken, login);  
-academicsRouter.post('/register-course',auth.authenticateToken, registerCourse);
-academicsRouter.post('/drop-course', dropCourse);
-academicsRouter.post('/change-section', changeSection);
-academicsRouter.get('/timetable', provideTimetable);
-academicsRouter.get('/exam-schedule', provideExamSchedule);
+academicsRouter.post('/academic-login', Login);  
+academicsRouter.post('/register-course',auth.VerifyUser,registerCourse);
+academicsRouter.post('/drop-course',auth.VerifyUser, dropCourse);
+academicsRouter.post('/change-section',auth.VerifyUser, changeSection);
+academicsRouter.get('/timetable',auth.VerifyUser, provideTimetable);
+academicsRouter.get('/exam-schedule',auth.VerifyUser, provideExamSchedule);
 
 module.exports = academicsRouter;

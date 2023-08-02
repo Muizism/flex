@@ -1,39 +1,74 @@
+const jwt = require('jsonwebtoken');
 
-  const jwt = require('jsonwebtoken');
-  const bcrypt = require('bcrypt');
-  
-  exports.hashPassword = async (password) => {
-    return bcrypt.hash(password, 10);
-  };
-  
-  exports.comparePasswords = async (password, hashedPassword) => {
-    return bcrypt.compare(password, hashedPassword);
-  };
-  
-  exports.generateToken = (payload) => {
-    return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
-  };
-  
-  exports.authenticate = async (req, res, next) => {
-    try {
-      const token = req.header('Authorization').replace('Bearer ', '');
-  
-      if (!token) {
-        return res.status(401).send({ error: 'Authentication token missing.' });
-      }
-  
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  
-      const student = await Student.findById(decoded.id);
-  
-      if (!student) {
-        return res.status(401).send({ error: 'No student found.' });
-      }
-  
-      req.student = student;
-      req.token = token;
-      next();
-    } catch (error) {
-      res.status(401).send({ error: 'Error in authentication.' });
+let VerifyToken = (req, res, next) => {
+    let token = req.headers.authorization;
+    if (!token) {
+        res.status(401).json({ "Success": false, "Message": "No token provided" });
     }
+    else {
+        jwt.verify(token, process.env.SECRET, (err, decoded) => {
+            if (err) {
+                res.status(401).json({ "Success": false, "Message": "Invalid token" });
+            }
+            else {
+                req.decoded = decoded;
+                next();
+            }
+        });
+    }
+}
+
+
+let verifyTokenExiry = (req, res, next) => {
+    let token = req.headers.authorization;
+    if (!token) {
+        res.status(401).json({ "Success": false, "Message": "No token provided" });
+    }
+    else {
+        jwt.verify(token, process.env.SECRET, (err, decoded) => {
+            if (err) {
+                res.status(401).json({ "Success": false, "Message": "Invalid token" });
+
+            }
+            else {
+                res.status(200).json({ "Success": true, "Message": "Token is valid" });
+            }
+        });
+    }
+}
+
+
+let VerifyAdmin = (req, res, next) => {
+    if (req.decoded.role == "admin") {
+        next();
+    }
+    else {
+        res.status(401).json({ "Success": false, "Message": "Unauthorized Access" });
+    }
+}
+
+let VerifyUser = (req, res, next) => {
+  let token = req.headers.authorization;
+  if (!token) {
+      res.status(401).json({ "Success": false, "Message": "No token provided" });
   }
+  else {
+      jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+          if (err) {
+              res.status(401).json({ "Success": false, "Message": "Invalid token" });
+
+          }
+          else {
+              //res.status(200).json({ "Success": true, "Message": "Token is valid" });
+              next();
+          }
+      });
+  }
+}
+
+module.exports = {
+    VerifyToken,
+    VerifyAdmin,
+    verifyTokenExiry,
+    VerifyUser
+}

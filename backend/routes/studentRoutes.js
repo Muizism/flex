@@ -12,17 +12,15 @@ const {
   checkGrades,
   borrowBook,
   giveFeedback,
-  login,
+  Login,
 } = require('../controllers/studentController');
 
-studentRouter.post('/login',login);
-studentRouter.get('/check-marks', checkMarks);
-studentRouter.get('/check-attendance', checkAttendance);
-studentRouter.post('/withdraw-course', withdrawCourse);
-studentRouter.post('/pay-fee', payFee);
-studentRouter.post('/book-library-room', bookLibraryRoom);
-studentRouter.get('/check-grades', checkGrades);
-studentRouter.post('/borrow-book', borrowBook);
-studentRouter.post('/give-feedback', giveFeedback);
+studentRouter.post('/login',Login);
+studentRouter.get('/check-marks',auth.VerifyUser, checkMarks);
+studentRouter.get('/check-attendance',auth.VerifyUser, checkAttendance);
+studentRouter.post('/withdraw-course',auth.VerifyUser, withdrawCourse);
+studentRouter.post('/pay-fee',auth.VerifyUser, payFee);
+studentRouter.get('/check-grades',auth.VerifyUser, checkGrades);
+studentRouter.post('/give-feedback',auth.VerifyUser, giveFeedback);
 
 module.exports = studentRouter;
