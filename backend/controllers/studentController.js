@@ -5,10 +5,11 @@ const Attendance = require('../models/attendance');
 const Course = require('../models/course');
 
 const login = async (req, res) => {
+  console.log("inlogin")
   try {
-    const { username, password } = req.body;
-    const student = await Student.findOne({ username });
-
+    const { rollNo, password } = req.body;
+    const student = await Student.findOne({ rollNo });
+console.log(student);
     if (!student) {
       return res.status(404).json({ error: 'Student not found' });
     }
@@ -16,8 +17,9 @@ const login = async (req, res) => {
     const passwordMatch = await auth.comparePasswords(password, student.hashedPassword);
 
     if (passwordMatch) {
-      const token = auth.generateToken({ username: student.username });
+      const token = auth.generateToken({ rollNo: student.rollNo });
       return res.json({ token });
+      console.log(token);
     } else {
       return res.status(401).json({ error: 'Authentication failed' });
     }
