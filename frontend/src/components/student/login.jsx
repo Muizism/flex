@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -13,39 +17,47 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      // Your login logic here...
-      // For simplicity, I'm just showing a success message after 2 seconds.
-      setMessage('Successfully logged in! Redirecting...');
+    // Validation checks
+    if (!formData.email || !formData.password) {
+      toast.error('Please fill in all fields.'); // Show error toast for validation
+      return;
+    }
 
-      setTimeout(() => {
-        setMessage('');
-        // Redirect to the home page or any other page after successful login
-        // Replace '/home' with the URL path of your student home page component
-        window.location.href = '/home';
-      }, 2000); // Redirect after 2 seconds (you can adjust the delay as needed)
+    try {
+      const response = await axios.post('http://localhost:3001/students/login', formData);
+      console.log(response.data);
+      setMessage('Successfully logged in!');
+      toast.success('Login successful'); // Show success toast on successful login
 
     } catch (error) {
       console.error('Something went wrong while logging in:', error);
       setMessage('An error occurred while logging in. Please check your username and password and try again.');
+      toast.error('An error occurred while logging in.'); // Show error toast on login error
     }
   }
 
   return (
-    <div className="container mt-5">
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Email</label>
-          <input type="text" name="email" value={formData.email} onChange={handleChange} className="form-control" required />
+    <div className="container-fluid vh-100 bg-secondary d-flex align-items-center justify-content-center">
+      <div className="card shadow-lg" style={{ backgroundColor: '#f0f0f0' }}>
+        <div className="card-body p-4">
+          <h4 className="card-title mb-4">Student Login</h4>
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label>Username</label>
+              <input type="text" name="email" onChange={handleChange} className="form-control" placeholder="Email" required minLength="3" />
+            </div>
+            <div className="form-group">
+              <label>Password</label>
+              <input type="password" name="password" onChange={handleChange} className="form-control" placeholder="Password" required minLength="8" />
+            </div>
+            <br />
+            <button type="submit" className="btn btn-primary btn-block">Log In</button>
+            {message && <div className="mt-3 text-center">{message}</div>}
+            <p className="mt-3 text-center text-secondary">Don't have an account? <Link to="/signup">Sign up</Link></p>
+          </form>
         </div>
-        <div className="form-group">
-          <label>Password</label>
-          <input type="password" name="password" value={formData.password} onChange={handleChange} className="form-control" required />
-        </div>
-        <button type="submit" className="btn btn-primary">Log In</button>
-        {message && <div className="mt-3">{message}</div>}
-      </form>
+      </div>
+      <ToastContainer /> {/* React-Toastify container */}
     </div>
   );
 }

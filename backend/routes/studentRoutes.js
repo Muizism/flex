@@ -16,7 +16,6 @@ const {
 } = require('../controllers/studentController');
 
 studentRouter.post('/login',Login);
-studentRouter.get('/check-marks',auth.VerifyUser, checkMarks);
 studentRouter.get('/check-attendance',auth.VerifyUser, checkAttendance);
 studentRouter.post('/withdraw-course',auth.VerifyUser, withdrawCourse);
 studentRouter.post('/pay-fee',auth.VerifyUser, payFee);
