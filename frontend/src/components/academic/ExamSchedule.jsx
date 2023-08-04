@@ -48,6 +48,9 @@ function ExamSchedule() {
               <li className="nav-item">
                 <Link to="/timetable" className="nav-link">Time Table</Link>
               </li>
+              <li className="nav-item">
+                <Link to="/register-course" className="nav-link">Register Course</Link>
+              </li>
               {/* Add other routes/buttons as needed */}
             </ul>
           </div>

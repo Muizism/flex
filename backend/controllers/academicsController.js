@@ -1,6 +1,7 @@
 const Course = require('../models/course');
 const academic = require('../models/academic');
 const auth = require('../middleware/auth');
+const student = require('../models/student');
 
 let Login = (req, res) => {
   let email = req.body.email;
@@ -38,26 +39,32 @@ let Login = (req, res) => {
 };
 
 
-const registerCourse = (req, res) => {
-  const academicId = req.userId || req.params.academicId;
+const registerCourse = async (req, res) => {
+  const rollNoToFind = req.body.rollNo; // Assuming the roll number is sent in the request body
   const courseIdToRegister = req.body.courseId;
 
-  academic.findById(academicId)
-    .then((academic) => {
-      if (academic.courses.includes(courseIdToRegister)) {
-        return res.status(400).json({ error: 'academic is already registered for this course.' });
-      }
+  try {
+    // Find the student by roll number
+    const foundStudent = await student.findOne({ rollno: rollNoToFind });
 
-      academic.courses.push(courseIdToRegister);
-      return academic.save();
-    })
-    .then((updatedacademic) => {
-      res.json(updatedacademic);
-    })
-    .catch((err) => {
-      res.status(500).json({ error: 'Failed to register for the course.' });
-    });
+    if (!foundStudent) {
+      return res.status(404).json({ error: 'Student not found.' });
+    }
+
+    if (foundStudent.courses.includes(courseIdToRegister)) {
+      return res.status(400).json({ error: 'Student is already registered for this course.' });
+    }
+
+    // Register the course for the student
+    foundStudent.courses.push(courseIdToRegister);
+    const updatedStudent = await foundStudent.save();
+
+    res.json(updatedStudent);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to register for the course.' });
+  }
 };
+
 
 const dropCourse = (req, res) => {
   const studentId = req.userId || req.params.studentId;

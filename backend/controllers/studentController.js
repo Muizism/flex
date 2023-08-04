@@ -11,13 +11,13 @@ const bcrypt = require('bcrypt');
 let Login = (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
-  
+
   Student.findOne({ email: email })
     .then(user => {
       if (!user) {
-        return res.status(400).json({"Success": false, 'Message': 'User not found' });
+        return res.status(400).json({ "Success": false, 'Message': 'User not found' });
       }
-      
+
       bcrypt.compare(password, user.password, (err, result) => {
         if (err) {
           // Handle the error, e.g., log it or return an error response
@@ -31,10 +31,10 @@ let Login = (req, res) => {
             _id: user._id,
           }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-          return res.status(200).json({"Success": true, user, token, 'Message': 'User logged in successfully' });
+          return res.status(200).json({ "Success": true, user, token, 'Message': 'User logged in successfully' });
         } else {
           // Passwords do not match
-          return res.status(400).json({"Success": false, 'Message': 'User login failed' });
+          return res.status(400).json({ "Success": false, 'Message': 'User login failed' });
         }
       });
     })
@@ -43,18 +43,6 @@ let Login = (req, res) => {
     });
 };
 
-
-const checkMarks = (req, res) => {
-  const studentId = req.userId || req.params.studentId;
-
-  Mark.find({ student: studentId })
-    .then((marks) => {
-      res.json(marks);
-    })
-    .catch((err) => {
-      res.status(500).json({ error: 'Failed to fetch marks data.' });
-    });
-};
 
 
 const checkAttendance = (req, res) => {
@@ -90,7 +78,7 @@ const withdrawCourse = (req, res) => {
 
 const payFee = (req, res) => {
   const studentId = req.userId || req.params.studentId;
- 
+
   const feeAmount = req.body.feeAmount;
 
   res.json({ message: 'Fee paid successfully.' });
@@ -102,7 +90,7 @@ const payFee = (req, res) => {
 const checkGrades = (req, res) => {
   const studentId = req.userId || req.params.studentId;
 
-  
+
   Course.find({ students: { $elemMatch: { student: studentId, grade: { $ne: null } } } })
     .then((coursesWithGrades) => {
       res.json(coursesWithGrades);
@@ -116,18 +104,18 @@ const checkGrades = (req, res) => {
 
 const giveFeedback = (req, res) => {
   const studentId = req.userId || req.params.studentId;
-  
+
   const feedbackMessage = req.body.message;
 
   res.json({ message: 'Feedback submitted successfully.' });
 };
 
 module.exports = {
-  checkMarks,
+
   checkAttendance,
   withdrawCourse,
   payFee,
- 
+
   checkGrades,
 
   giveFeedback,
