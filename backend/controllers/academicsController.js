@@ -4,6 +4,7 @@ const auth = require('../middleware/auth');
 const student = require('../models/student');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const Timetable = require('../models/timeTable');
 let Login = (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
@@ -134,29 +135,23 @@ const getAcademicById = (req, res) => {
 };
 
 
-const provideTimetable = (req, res) => {
-  const studentId = req.userId || req.params.studentId;
+const createTable = async (req, res) => {
+  const { department, courseName, section, date, time } = req.body;
 
-  Student.findById(studentId)
-    .populate('courses', 'name section schedule')
-    .exec()
-    .then((student) => {
-      if (!student) {
-        return res.status(404).json({ error: 'Student not found.' });
-      }
-
-      const timetable = student.courses.map((course) => ({
-        courseId: course._id,
-        courseName: course.name,
-        section: course.section,
-        schedule: course.schedule,
-      }));
-
-      res.json(timetable);
-    })
-    .catch((err) => {
-      res.status(500).json({ error: 'Failed to fetch the timetable.' });
+  try {
+    const newTimetableEntry = await Timetable.create({
+      department,
+      courseName,
+      section,
+      date,
+      time,
     });
+
+    res.status(201).json(newTimetableEntry);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error creating timetable entry' });
+  }
 };
 
 const provideExamSchedule = (req, res) => {
@@ -186,12 +181,36 @@ const provideExamSchedule = (req, res) => {
     });
 };
 
+const updateTimetableEntry = async (req, res) => {
+  const { id } = req.params;
+  const updatedData = req.body;
+
+  try {
+    const updatedEntry = await Timetable.findByIdAndUpdate(id, updatedData, { new: true });
+    res.json(updatedEntry);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update timetable entry.' });
+  }
+};
+const deleteTimetableEntry = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await Timetable.findByIdAndDelete(id);
+    res.json({ message: 'Timetable entry deleted successfully.' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete timetable entry.' });
+  }
+};
 module.exports = {
   registerCourse,
   dropCourse,
   changeSection,
-  provideTimetable,
+  createTable,
   provideExamSchedule,
   Login,
   getAcademicById,
+  deleteTimetableEntry,
+  updateTimetableEntry,
+  
 };

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -17,69 +16,41 @@ function Timetable() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCourseData({ ...courseData, [name]: value });
-  }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!courseData.department || !courseData.courseName || !courseData.section || !courseData.date || !courseData.time) {
-      toast.error('Please fill in all fields.'); // Show error toast for validation
+      toast.error('Please fill in all fields.');
       return;
     }
 
     if (isEditing) {
-      // Edit existing entry
       const updatedData = timetableData.map((course, index) => (index === isEditing - 1 ? courseData : course));
       setTimetableData(updatedData);
-      toast.success('Course edited successfully!'); // Show success toast for edit
+      toast.success('Course edited successfully!');
     } else {
-      // Add new entry
       setTimetableData([...timetableData, courseData]);
-      toast.success('Course added successfully!'); // Show success toast for add
+      toast.success('Course added successfully!');
     }
 
     setCourseData({ department: '', courseName: '', section: '', date: '', time: '' });
     setIsEditing(false);
-  }
-
+  };
 
   const handleEdit = (index) => {
     setCourseData(timetableData[index]);
-    setIsEditing(index + 1); // To avoid 0 index (0 is considered as falsy)
-  }
+    setIsEditing(index + 1);
+  };
 
   const handleDelete = (index) => {
     const updatedData = timetableData.filter((_, i) => i !== index);
     setTimetableData(updatedData);
-  }
+  };
 
   return (
     <div className="container">
-      <nav className="navbar navbar-expand-lg navbar-light bg-light mb-3">
-        <div className="container">
-          <Link to="/academic-home/:academicId" className="navbar-brand">Home</Link>
-          <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav">
-              <li className="nav-item">
-                <Link to="/exam-schedule" className="nav-link">Exam Shedule</Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/register-course" className="nav-link">Register Course</Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/change-section" className="nav-link">Change Section</Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/drop-course" className="nav-link">Drop Course</Link>
-              </li>
-              {/* Add other routes/buttons as needed */}
-            </ul>
-          </div>
-        </div>
-      </nav>
-      <h2 style={{ textAlign: "center" }}>Timetable</h2>
+      <h2 style={{ textAlign: 'center' }}>Timetable</h2>
 
       <div className="row justify-content-center mb-3">
         <div className="col-md-8">
@@ -108,6 +79,7 @@ function Timetable() {
           </form>
         </div>
       </div>
+
       <div className="row justify-content-center">
         <div className="col-md-8">
           <div className="table-responsive">
@@ -141,7 +113,7 @@ function Timetable() {
           </div>
         </div>
       </div>
-      <ToastContainer /> {/* React-Toastify container */}
+      <ToastContainer />
     </div>
   );
 }

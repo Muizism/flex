@@ -7,17 +7,21 @@ const {
   registerCourse,
   dropCourse,
   changeSection,
-  provideTimetable,
+  createTable,
   provideExamSchedule,
   Login,
   getAcademicById,
+  deleteTimetableEntry,
+  updateTimetableEntry,
 } = require('../controllers/academicsController');
 
 academicsRouter.post('/academic-login', Login);  
 academicsRouter.post('/register-course',auth.VerifyUser,registerCourse);
 academicsRouter.post('/drop-course',auth.VerifyUser, dropCourse);
 academicsRouter.post('/change-section',auth.VerifyUser, changeSection);
-academicsRouter.get('/timetable',auth.VerifyUser, provideTimetable);
+academicsRouter.get('/timetable',auth.VerifyUser, createTable);
+academicsRouter.put('/timetable/:id',auth.VerifyUser, updateTimetableEntry);
+academicsRouter.delete('/timetable/:id',auth.VerifyUser, deleteTimetableEntry);
 academicsRouter.get('/exam-schedule',auth.VerifyUser, provideExamSchedule);
 academicsRouter.get('/academics/:id', async (req, res) => {
   try {
