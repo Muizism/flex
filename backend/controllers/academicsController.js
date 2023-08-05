@@ -1,46 +1,48 @@
 const Course = require('../models/course');
-const academic = require('../models/academic');
+const Academic = require('../models/academic');
 const auth = require('../middleware/auth');
 const student = require('../models/student');
-
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 let Login = (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
-  
-  academic.findOne({ email: email })
+
+  Academic.findOne({ email: email })
     .then(user => {
       if (!user) {
-        return res.status(400).json({"Success": false, 'Message': 'User not found' });
+        console.log("User not found");
+        return res.status(400).json({ "Success": false, 'Message': 'User not found' });
       }
-      
+
       bcrypt.compare(password, user.password, (err, result) => {
         if (err) {
-          // Handle the error, e.g., log it or return an error response
+          console.error("Error comparing passwords:", err);
           return res.status(500).json({ "Success": false, 'Message': 'Error comparing passwords' });
         }
 
         if (result === true) {
-          // Passwords match, create a JWT token and send the response
           let token = jwt.sign({
             email: user.email,
             _id: user._id,
           }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-          return res.status(200).json({"Success": true, user, token, 'Message': 'User logged in successfully' });
+          return res.status(200).json({ "Success": true, user, token, 'Message': 'User logged in successfully' });
         } else {
-          // Passwords do not match
-          return res.status(400).json({"Success": false, 'Message': 'User login failed' });
+          console.log("Password comparison failed");
+          return res.status(400).json({ "Success": false, 'Message': 'User login failed' });
         }
       });
     })
     .catch(err => {
+      console.error("Error finding user:", err);
       res.status(500).json({ "Success": false, 'Message': 'Error finding user' });
     });
 };
 
 
 const registerCourse = async (req, res) => {
-  const rollNoToFind = req.body.rollNo; // Assuming the roll number is sent in the request body
+  const rollNoToFind = req.body.rollNo; 
   const courseIdToRegister = req.body.courseId;
 
   try {
@@ -116,6 +118,21 @@ const changeSection = (req, res) => {
       res.status(500).json({ error: 'Failed to change the course section.' });
     });
 };
+const getAcademicById = (req, res) => {
+  const academicId = req.params.id;
+
+  Academic.findById(academicId)
+    .then((academic) => {
+      if (!academic) {
+        return res.status(404).json({ error: 'Academic not found.' });
+      }
+      res.json(academic);
+    })
+    .catch((err) => {
+      res.status(500).json({ error: 'Failed to fetch academic information.' });
+    });
+};
+
 
 const provideTimetable = (req, res) => {
   const studentId = req.userId || req.params.studentId;
@@ -176,4 +193,5 @@ module.exports = {
   provideTimetable,
   provideExamSchedule,
   Login,
+  getAcademicById,
 };

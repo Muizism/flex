@@ -56,7 +56,7 @@ function Timetable() {
     <div className="container">
       <nav className="navbar navbar-expand-lg navbar-light bg-light mb-3">
         <div className="container">
-          <Link to="/" className="navbar-brand">Home</Link>
+          <Link to="/academic-home/:academicId" className="navbar-brand">Home</Link>
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
@@ -67,6 +67,12 @@ function Timetable() {
               </li>
               <li className="nav-item">
                 <Link to="/register-course" className="nav-link">Register Course</Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/change-section" className="nav-link">Change Section</Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/drop-course" className="nav-link">Drop Course</Link>
               </li>
               {/* Add other routes/buttons as needed */}
             </ul>

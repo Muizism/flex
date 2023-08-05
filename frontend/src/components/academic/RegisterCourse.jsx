@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from 'react-router-dom';
 
@@ -32,7 +32,7 @@ const RegistrationForm = () => {
     <div className="container">
       <nav className="navbar navbar-expand-lg navbar-light bg-light mb-3">
         <div className="container">
-          <Link to="/" className="navbar-brand">Home</Link>
+          <Link to="/academic-home/:academicId" className="navbar-brand">Home</Link>
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
@@ -43,6 +43,13 @@ const RegistrationForm = () => {
               </li>
               <li className="nav-item">
                 <Link to="/exam-schedule" className="nav-link">Exam Schedule</Link>
+              </li>
+           
+              <li className="nav-item">
+                <Link to="/drop-course" className="nav-link">Drop Course</Link>
+              </li>
+                <li className="nav-item">
+                <Link to="/changset" className="nav-link">Change Section</Link>
               </li>
               {/* Add other routes/buttons as needed */}
             </ul>

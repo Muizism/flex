@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Login() {
+  const navigate = useNavigate(); // Initialize the useNavigate hook
+
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -19,7 +21,7 @@ function Login() {
     e.preventDefault();
     // Validation checks
     if (!formData.email || !formData.password) {
-      toast.error('Please fill in all fields.'); // Show error toast for validation
+      toast.error('Please fill in all fields.');
       return;
     }
 
@@ -27,12 +29,15 @@ function Login() {
       const response = await axios.post('http://localhost:3001/academics/academic-login', formData);
       console.log(response.data);
       setMessage('Successfully logged in!');
-      toast.success('Login successful'); // Show success toast on successful login
+      toast.success('Login successful');
+    
+      navigate(`/academic-home/${response.data.user._id}`);
+
 
     } catch (error) {
       console.error('Something went wrong while logging in:', error);
       setMessage('An error occurred while logging in. Please check your username and password and try again.');
-      toast.error('An error occurred while logging in.'); // Show error toast on login error
+      toast.error('An error occurred while logging in.');
     }
   }
 
@@ -57,7 +62,7 @@ function Login() {
           </form>
         </div>
       </div>
-      <ToastContainer /> {/* React-Toastify container */}
+      <ToastContainer />
     </div>
   );
 }

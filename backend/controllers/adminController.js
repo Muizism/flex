@@ -46,10 +46,10 @@ exports.signup = async (req, res) => {
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
   
-      const newStudent = new Student({
-       firstName,
-       lastName,
-       email,
+      const newAcademic = new Academic({
+      first_name: firstName,
+       last_name: lastName,
+       email: email,
        password: hashedPassword
       });
   

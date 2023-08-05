@@ -5,7 +5,10 @@ const academicsRoutes = require('./routes/academicRoutes');
 const studentRoutes = require('./routes/studentRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const express = require('express');
+const cors = require('cors');
 app = express();
+app.use(cors());
+
 dotenv.config();
 app.use(bodyParser.json());
 mongoose
