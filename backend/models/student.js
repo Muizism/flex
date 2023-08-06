@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 const studentSchema = new mongoose.Schema(
   {
     rollNo: { type: String, required: true },
     studentName: { type: String, required: true },
-    batch: { type:String,required:true },
-    CGPA: { type: Number,default:0,required: false },
+    batch: { type: String, required: true },
+    CGPA: { type: Number, default: 0, required: false },
     semester: { type: Number, required: true },
     degree: { type: String, required: true },
     section: { type: String, required: true },
@@ -14,9 +15,15 @@ const studentSchema = new mongoose.Schema(
     gender: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
-    address: { city: String, country: String, homePhone: String, home: String },
+    address: {
+      city: String,
+      country: String,
+      homePhone: String,
+      home: String,
+    },
     guardian: { type: String, required: true },
-    
+    courses: [{ type: String }],
+   
   },
   {
     timestamps: true,

@@ -4,7 +4,7 @@ const auth = require('../middleware/auth');
 const Academic = require('../models/academic');
 
 const {
-  registerCourse,
+  addCourseToStudent,
   dropCourse,
   changeSection,
   createTable,
@@ -13,16 +13,25 @@ const {
   getAcademicById,
   deleteTimetableEntry,
   updateTimetableEntry,
+  viewTimetable,
+  viewExamSchedule,
+  deleteExamScheduleEntry,
+  updateExamSchedule,
+  createExamSchedule
 } = require('../controllers/academicsController');
 
 academicsRouter.post('/academic-login', Login);  
-academicsRouter.post('/register-course',auth.VerifyUser,registerCourse);
-academicsRouter.post('/drop-course',auth.VerifyUser, dropCourse);
-academicsRouter.post('/change-section',auth.VerifyUser, changeSection);
-academicsRouter.get('/timetable',auth.VerifyUser, createTable);
-academicsRouter.put('/timetable/:id',auth.VerifyUser, updateTimetableEntry);
-academicsRouter.delete('/timetable/:id',auth.VerifyUser, deleteTimetableEntry);
-academicsRouter.get('/exam-schedule',auth.VerifyUser, provideExamSchedule);
+academicsRouter.post('/register-course',addCourseToStudent);
+academicsRouter.post('/drop-course', dropCourse);
+academicsRouter.put('/change-section', changeSection);
+academicsRouter.post('/timetable', createTable);
+academicsRouter.put('/timetable/:id', updateTimetableEntry);
+academicsRouter.delete('/timetable/:id', deleteTimetableEntry);
+academicsRouter.get('/view-table',viewTimetable);
+academicsRouter.get('/view-exam-schedule',viewExamSchedule);
+academicsRouter.post('/create-exam-schedule', createExamSchedule);
+academicsRouter.put('/update-exam-schedule/:id', updateExamSchedule);
+academicsRouter.delete('/delete-exam-schedule/:id', deleteExamScheduleEntry);
 academicsRouter.get('/academics/:id', async (req, res) => {
   try {
     const academic = await Academic.findById(req.params.id);

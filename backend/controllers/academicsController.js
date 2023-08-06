@@ -1,10 +1,11 @@
 const Course = require('../models/course');
 const Academic = require('../models/academic');
 const auth = require('../middleware/auth');
-const student = require('../models/student');
+const Student = require('../models/student');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Timetable = require('../models/timeTable');
+const Exam = require('../models/exam');
 let Login = (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
@@ -42,83 +43,93 @@ let Login = (req, res) => {
 };
 
 
-const registerCourse = async (req, res) => {
-  const rollNoToFind = req.body.rollNo; 
-  const courseIdToRegister = req.body.courseId;
-
+const addCourseToStudent = async (req, res) => {
   try {
-    // Find the student by roll number
-    const foundStudent = await student.findOne({ rollno: rollNoToFind });
+    const { rollNo, courseId } = req.body;
+    console.log(req.body);
 
-    if (!foundStudent) {
-      return res.status(404).json({ error: 'Student not found.' });
+    const student = await Student.findOne({ rollNo });
+
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
     }
 
-    if (foundStudent.courses.includes(courseIdToRegister)) {
-      return res.status(400).json({ error: 'Student is already registered for this course.' });
+
+   
+    const course_ids = ['MATH101', 'SCI201', 'HIST301', 'ENG401'];
+
+    if (!course_ids.includes(courseId)) {
+      console.log('Input courseId:', courseId);
+      console.log('Available course IDs:', course_ids);
+      return res.status(404).json({ message: 'Course not found' });
     }
 
-    // Register the course for the student
-    foundStudent.courses.push(courseIdToRegister);
-    const updatedStudent = await foundStudent.save();
 
-    res.json(updatedStudent);
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to register for the course.' });
+    if (student.courses.includes(courseId)) {
+      return res.status(400).json({ message: 'Student is already enrolled in the course' });
+    }
+
+
+    student.courses.push(courseId);
+    await student.save();
+
+    res.json({ message: 'Course added to student successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+const dropCourse = async (req, res) => {
+  try {
+    const { rollNo, courseId } = req.body;
+    console.log(req.body);
+
+    const student = await Student.findOne({ rollNo });
+
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+
+    if (!student.courses.includes(courseId)) {
+      return res.status(400).json({ message: 'Student is not enrolled in the course' });
+    }
+
+    student.courses = student.courses.filter(course => course !== courseId);
+    await student.save();
+
+    res.json({ message: 'Course removed from student successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+const changeSection = async (req, res) => {
+  try {
+    const { rollNo, newSection } = req.body;
+
+    const student = await Student.findOne({ rollNo });
+
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+
+    // if (student.courses.length === 0) {
+    //   return res.status(403).json({ message: 'Student is not enrolled in any courses' });
+    // }
+
+    student.section = newSection;
+    await student.save();
+    
+    res.json({ message: 'Section updated successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
 
 
-const dropCourse = (req, res) => {
-  const studentId = req.userId || req.params.studentId;
-  const courseIdToDrop = req.body.courseId;
 
-  Student.findByIdAndUpdate(
-    studentId,
-    { $pull: { courses: courseIdToDrop } },
-    { new: true }
-  )
-    .then((updatedStudent) => {
-      res.json(updatedStudent);
-    })
-    .catch((err) => {
-      res.status(500).json({ error: 'Failed to drop the course.' });
-    });
-};
-
-const changeSection = (req, res) => {
-  const studentId = req.userId || req.params.studentId;
-  const { courseId, newSection } = req.body;
-
-  Course.findById(courseId)
-    .then((course) => {
-      if (!course) {
-        return res.status(404).json({ error: 'Course not found.' });
-      }
-
-      if (!course.sections.includes(newSection)) {
-        return res.status(400).json({ error: 'Invalid section for the course.' });
-      }
-
-      Student.findOneAndUpdate(
-        { _id: studentId, courses: courseId },
-        { $set: { 'courses.$.section': newSection } },
-        { new: true }
-      )
-        .then((updatedStudent) => {
-          if (!updatedStudent) {
-            return res.status(404).json({ error: 'Course not found for the student.' });
-          }
-          res.json(updatedStudent);
-        })
-        .catch((err) => {
-          res.status(500).json({ error: 'Failed to change the course section.' });
-        });
-    })
-    .catch((err) => {
-      res.status(500).json({ error: 'Failed to change the course section.' });
-    });
-};
 const getAcademicById = (req, res) => {
   const academicId = req.params.id;
 
@@ -202,8 +213,85 @@ const deleteTimetableEntry = async (req, res) => {
     res.status(500).json({ error: 'Failed to delete timetable entry.' });
   }
 };
+const viewTimetable = async (req, res) => {
+  try {
+    const timetableEntries = await Timetable.find();
+    res.json(timetableEntries);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch timetable entries.' });
+  }
+};
+const createExamSchedule = async (req, res) => {
+  const { examName, date, time, venue } = req.body;
+
+  try {
+    const newExamEntry = await Exam.create({
+      examName,
+      date,
+      time,
+      venue,
+    });
+
+    res.status(201).json(newExamEntry);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error creating exam schedule entry' });
+  }
+};
+const updateExamSchedule = async (req, res) => {
+  const { examName, date, time, venue } = req.body;
+  const examId = req.params.id;
+
+  try {
+    const updatedExamEntry = await Exam.findByIdAndUpdate(
+      examId,
+      {
+        examName,
+        date,
+        time,
+        venue,
+      },
+      { new: true }
+    );
+
+    if (!updatedExamEntry) {
+      return res.status(404).json({ message: 'Exam schedule entry not found' });
+    }
+
+    res.status(200).json(updatedExamEntry);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error updating exam schedule entry' });
+  }
+};
+
+const deleteExamScheduleEntry = async (req, res) => {
+  const examId = req.params.id;
+
+  try {
+    const deletedExamEntry = await Exam.findByIdAndDelete(examId);
+
+    if (!deletedExamEntry) {
+      return res.status(404).json({ message: 'Exam schedule entry not found' });
+    }
+
+    res.status(200).json({ message: 'Exam schedule entry deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error deleting exam schedule entry' });
+  }
+};
+const viewExamSchedule = async (req, res) => {
+  try {
+    const examEntries = await Exam.find();
+    res.status(200).json(examEntries);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching exam schedule' });
+  }
+};
 module.exports = {
-  registerCourse,
+  addCourseToStudent,
   dropCourse,
   changeSection,
   createTable,
@@ -212,5 +300,10 @@ module.exports = {
   getAcademicById,
   deleteTimetableEntry,
   updateTimetableEntry,
+  viewTimetable,
+  viewExamSchedule,
+  deleteExamScheduleEntry,
+  updateExamSchedule,
+  createExamSchedule,
   
 };

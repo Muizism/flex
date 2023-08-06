@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from 'react-router-dom';
 
@@ -21,9 +21,11 @@ const RegistrationForm = () => {
     try {
       const response = await axios.post('http://localhost:3001/academics/register-course', formData);
       setMessage('Course registration successful');
+      toast.success('Course registration successful');
       console.log(response.data); // You can log the response from the server if needed
     } catch (error) {
       setMessage('Course registration failed. Please try again.');
+      toast.error('Course registration failed. Please try again.');
       console.error('Course registration error:', error);
     }
   };

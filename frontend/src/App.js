@@ -8,6 +8,9 @@ import RegisterCourse from './components/academic/RegisterCourse';
 import DropCourse from './components/academic/DropCourse';
 import ChangeSection from './components/academic/ChangeSection';
 import AcademicHome from './components/academic/AcademicHome';
+import Exam from './components/student/Exam';
+import Timetable from './components/student/TimeTable';
+import Fee from './components/student/Fee';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 // import { AcademicProvider } from './components/academic/academicHomeContext';
 
@@ -17,9 +20,11 @@ function App() {
      <Routes>
   <Route path="/" element={<Login />} />
   <Route path="/academic-login" element={<AcademicLogin />} />
-  <Route path="/home" element={<HomePage />} />
+  <Route path="/home/:studentId" element={<HomePage />} />
   <Route path="/academic-home/:academicId" element={<AcademicHome />} />
- 
+  <Route path="/show-exam" element={<Exam />} />
+  <Route path="/show-table" element={<Timetable />} />
+  <Route path="/payment" element={<Fee />} />
     {/* <AcademicProvider> */}
       <Route path="/drop-course" element={<DropCourse />} />
       <Route path="/change-section" element={<ChangeSection />} />

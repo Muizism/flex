@@ -4,7 +4,7 @@ import { Form, Button, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const DropCourse = () => {
-  const [studentRollNumber, setStudentRollNumber] = useState('');
+  const [rollNo, setrollNo] = useState('');
   const [courseId, setCourseId] = useState('');
   const [message, setMessage] = useState('');
 
@@ -13,10 +13,10 @@ const DropCourse = () => {
 
     try {
       const response = await axios.post('http://localhost:3001/academics/drop-course', {
-        studentId: studentRollNumber, // Assuming you pass student's ID here
+        studentId: rollNo, // Assuming you pass student's ID here
         courseId: courseId,
       });
-      setMessage(`Course dropped for student with ID ${studentRollNumber}`);
+      setMessage(`Course dropped for student with ID ${rollNo}`);
     } catch (error) {
       console.error('Failed to drop course:', error);
       setMessage('Failed to drop the course. Please try again.');
@@ -58,8 +58,8 @@ const DropCourse = () => {
           <Form.Label>Student Roll Number</Form.Label>
           <Form.Control
             type="text"
-            value={studentRollNumber}
-            onChange={(e) => setStudentRollNumber(e.target.value)}
+            value={rollNo}
+            onChange={(e) => setrollNo(e.target.value)}
             required
           />
         </Form.Group>

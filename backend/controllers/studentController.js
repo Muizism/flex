@@ -3,6 +3,10 @@ const Student = require('../models/student');
 const Mark = require('../models/marks');
 const Attendance = require('../models/attendance');
 const Course = require('../models/course');
+const Exam = require('../models/exam');
+const Timetable = require('../models/timeTable');
+const Fee = require('../models/fee');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const jwt = require('jsonwebtoken');
 
@@ -20,7 +24,7 @@ let Login = (req, res) => {
 
       bcrypt.compare(password, user.password, (err, result) => {
         if (err) {
-          // Handle the error, e.g., log it or return an error response
+      
           return res.status(500).json({ "Success": false, 'Message': 'Error comparing passwords' });
         }
 
@@ -45,6 +49,16 @@ let Login = (req, res) => {
 
 
 
+const getAllExams = async (req, res) => {
+  try {
+    const exams = await Exam.find(); // Retrieve all exams from the database
+
+    res.status(200).json(exams); // Send the array of exams as a JSON response
+  } catch (error) {
+    console.error('Error fetching exams:', error);
+    res.status(500).json({ message: 'Internal server error' }); // Handle errors with a 500 response
+  }
+};
 const checkAttendance = (req, res) => {
   const studentId = req.userId || req.params.studentId;
 
@@ -76,12 +90,40 @@ const withdrawCourse = (req, res) => {
 };
 
 
-const payFee = (req, res) => {
-  const studentId = req.userId || req.params.studentId;
+const payFee = async (req, res) => {
+  try {
+    const { rollNo, amount } = req.body;
 
-  const feeAmount = req.body.feeAmount;
+    // Check if the student with the provided rollNo exists
+    const existingFee = await Fee.findOne({ rollNo });
 
-  res.json({ message: 'Fee paid successfully.' });
+    if (!existingFee) {
+      return res.status(404).json({ message: 'Student fee record not found' });
+    }
+
+    if (existingFee.status === 'Paid') {
+      return res.status(400).json({ message: 'Fee has already been paid for this student' });
+    }
+
+    // Create a Stripe Payment Intent
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount * 100, // Stripe requires the amount in cents
+      currency: 'usd', // Change to your desired currency
+      description: 'Student Fee Payment',
+      metadata: { rollNo: rollNo }, // Attach any additional metadata you need
+    });
+
+    // Update the fee record status to 'Paid'
+    existingFee.amount = amount;
+    existingFee.status = 'Paid';
+
+    await existingFee.save();
+
+    res.json({ clientSecret: paymentIntent.client_secret });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 };
 
 
@@ -100,7 +142,15 @@ const checkGrades = (req, res) => {
     });
 };
 
-
+const getTimetable = async (req, res) => {
+  try {
+    const timetableData = await Timetable.find();
+    res.json(timetableData);
+  } catch (error) {
+    console.error('Error fetching timetable:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
 
 const giveFeedback = (req, res) => {
   const studentId = req.userId || req.params.studentId;
@@ -115,9 +165,9 @@ module.exports = {
   checkAttendance,
   withdrawCourse,
   payFee,
-
+  getAllExams,
   checkGrades,
-
+  getTimetable,
   giveFeedback,
   Login,
 };
