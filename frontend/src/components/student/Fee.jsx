@@ -4,7 +4,8 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { CardElement, Elements, useStripe, useElements } from '@stripe/react-stripe-js';
-import stripePromise from './stripe'; // Path to your stripe.js file
+import stripePromise from './stripe'; 
+import { Link } from 'react-router-dom';
 
 const FeePayment = () => {
   const stripe = useStripe();
@@ -53,6 +54,37 @@ const FeePayment = () => {
 
   return (
     <Container>
+         <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <div className="container">
+        <Link to="/home/:studentId" className="navbar-brand">Home</Link>
+        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav">
+            <li className="nav-item">
+              <Link to="/check-attendance" className="nav-link">Check Attendance</Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/withdraw-course" className="nav-link">Withdraw Course</Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/pay-fee" className="nav-link">Pay Fee</Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/check-grades" className="nav-link">Check Grades</Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/give-feedback" className="nav-link">Give Feedback</Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/show-exam" className="nav-link">Show Exams</Link>
+            </li>
+            
+          </ul>
+        </div>
+      </div>
+    </nav>
       <h2>Fee Payment</h2>
       <Form onSubmit={handlePayment}>
         <Form.Group controlId="rollNo">

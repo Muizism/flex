@@ -6,6 +6,7 @@ const Course = require('../models/course');
 const Exam = require('../models/exam');
 const Timetable = require('../models/timeTable');
 const Fee = require('../models/fee');
+const Feedback = require('../models/feedback');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const jwt = require('jsonwebtoken');
@@ -126,9 +127,6 @@ const payFee = async (req, res) => {
   }
 };
 
-
-
-
 const checkGrades = (req, res) => {
   const studentId = req.userId || req.params.studentId;
 
@@ -152,12 +150,34 @@ const getTimetable = async (req, res) => {
   }
 };
 
-const giveFeedback = (req, res) => {
-  const studentId = req.userId || req.params.studentId;
+const giveFeedback = async (req, res) => {
+  try {
+    const { studentId, teacherId, courseId, rating, comment } = req.body;
 
-  const feedbackMessage = req.body.message;
+    const feedback = new Feedback({
+      studentId,
+      teacherId,
+      courseId,
+      rating,
+      comment,
+    });
 
-  res.json({ message: 'Feedback submitted successfully.' });
+    await feedback.save();
+
+    res.json({ message: 'Feedback submitted successfully' });
+  } catch (error) {
+    console.error('Feedback submission error:', error);
+    res.status(500).json({ message: 'Failed to submit feedback. Please try again.' });
+  }
+};
+const getAllFeedbacks = async (req, res) => {
+  try {
+    const feedbacks = await Feedback.find();
+    res.json(feedbacks);
+  } catch (error) {
+    console.error('Error fetching feedbacks:', error);
+    res.status(500).json({ message: 'Failed to fetch feedbacks' });
+  }
 };
 
 module.exports = {
@@ -169,5 +189,6 @@ module.exports = {
   checkGrades,
   getTimetable,
   giveFeedback,
+  getAllFeedbacks,
   Login,
 };

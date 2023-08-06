@@ -47,6 +47,11 @@ const Timetable = () => {
             <li className="nav-item">
               <Link to="/show-exam" className="nav-link">Show Exams</Link>
             </li>
+            <li className="nav-item">
+              <Link to="/payment" className="nav-link">Pay Fee</Link>
+            </li>
+            
+
             
             {/* Add other routes/buttons as needed */}
           </ul>

@@ -11,6 +11,8 @@ import AcademicHome from './components/academic/AcademicHome';
 import Exam from './components/student/Exam';
 import Timetable from './components/student/TimeTable';
 import Fee from './components/student/Fee';
+import Feedback from './components/student/Feedback';
+
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 // import { AcademicProvider } from './components/academic/academicHomeContext';
 
@@ -25,6 +27,7 @@ function App() {
   <Route path="/show-exam" element={<Exam />} />
   <Route path="/show-table" element={<Timetable />} />
   <Route path="/payment" element={<Fee />} />
+  <Route path="/feedback" element={<Feedback />} />
     {/* <AcademicProvider> */}
       <Route path="/drop-course" element={<DropCourse />} />
       <Route path="/change-section" element={<ChangeSection />} />

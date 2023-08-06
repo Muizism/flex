@@ -9,10 +9,10 @@ const {
   checkAttendance,
   withdrawCourse,
   payFee,
-
+  giveFeedback,
+  getAllFeedbacks,
   checkGrades,
   getTimetable,
-  giveFeedback,
   Login,
   getAllExams,
 } = require('../controllers/studentController');
@@ -22,9 +22,10 @@ studentRouter.get('/check-attendance',auth.VerifyUser, checkAttendance);
 studentRouter.post('/withdraw-course',auth.VerifyUser, withdrawCourse);
 studentRouter.post('/pay-fee', payFee);
 studentRouter.get('/check-grades',auth.VerifyUser, checkGrades);
-studentRouter.post('/give-feedback',auth.VerifyUser, giveFeedback);
 studentRouter.get('/show-exam', getAllExams);
 studentRouter.get('/show-table', getTimetable);
+studentRouter.get('/give-feedback', giveFeedback);
+studentRouter.get('/show-feedback', getAllFeedbacks);
 
 studentRouter.get('/students/:id', async (req, res) => {
   try {

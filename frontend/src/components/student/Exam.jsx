@@ -48,6 +48,9 @@ const ExamsTable = () => {
             <li className="nav-item">
               <Link to="/show-table" className="nav-link">Show Timetable</Link>
             </li>
+            <li className="nav-item">
+              <Link to="/payment" className="nav-link">Pay Fee</Link>
+            </li>
             {/* Add other routes/buttons as needed */}
           </ul>
         </div>
