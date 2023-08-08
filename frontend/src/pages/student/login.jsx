@@ -18,7 +18,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Validation checks
+
     if (!formData.email || !formData.password) {
       toast.error('Please fill in all fields.'); // Show error toast for validation
       return;
@@ -27,6 +27,7 @@ function Login() {
     try {
       const response = await axios.post('http://localhost:3001/students/login', formData);
       console.log(response.data);
+      localStorage.setItem('userId', response.data.user._id);
       setMessage('Successfully logged in!');
       toast.success('Login successful'); // Show success toast on successful login
 

@@ -1,17 +1,19 @@
 import './App.css';
-import Login from './components/student/login';
-import HomePage from './components/student/HomePage';
-import AcademicLogin from './components/academic/login';
-import TimeTable from './components/academic/TimeTable';
-import ExamSchedule from './components/academic/ExamSchedule';
-import RegisterCourse from './components/academic/RegisterCourse';
-import DropCourse from './components/academic/DropCourse';
-import ChangeSection from './components/academic/ChangeSection';
-import AcademicHome from './components/academic/AcademicHome';
-import Exam from './components/student/Exam';
-import Timetable from './components/student/TimeTable';
-import Fee from './components/student/Fee';
-import Feedback from './components/student/Feedback';
+import Login from './pages/student/login';
+import HomePage from './pages/student/HomePage';
+import AcademicLogin from './pages/academic/login';
+import TimeTable from './pages/academic/TimeTable';
+import ExamSchedule from './pages/academic/ExamSchedule';
+import RegisterCourse from './pages/academic/RegisterCourse';
+import DropCourse from './pages/academic/DropCourse';
+import ChangeSection from './pages/academic/ChangeSection';
+import AcademicHome from './pages/academic/AcademicHome';
+import Exam from './pages/student/Exam';
+import Timetable from './pages/student/TimeTable';
+import Fee from './pages/student/Fee';
+import Feedback from './pages/student/Feedback';
+import Navbar from './components/navbar';
+
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 // import { AcademicProvider } from './components/academic/academicHomeContext';
@@ -21,6 +23,7 @@ function App() {
     <Router>
      <Routes>
   <Route path="/" element={<Login />} />
+  <Route path='/navbar' element={<Navbar />} />
   <Route path="/academic-login" element={<AcademicLogin />} />
   <Route path="/home/:studentId" element={<HomePage />} />
   <Route path="/academic-home/:academicId" element={<AcademicHome />} />

@@ -96,7 +96,7 @@ const ExamSchedulePage = () => {
     <div className="container mt-4">
        <nav className="navbar navbar-expand-lg navbar-light bg-light mb-3">
         <div className="container">
-          <Link to="/academic-home/:academicId" className="navbar-brand">Home</Link>
+        <Link to={`/academic-home/${localStorage.getItem('userId')}`} className="navbar-brand">Home</Link>
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
@@ -109,7 +109,7 @@ const ExamSchedulePage = () => {
                 <Link to="/register-course" className="nav-link">Register Course</Link>
               </li>
               <li className="nav-item">
-                <Link to="/time-table" className="nav-link">Time Table</Link>
+                <Link to="/timetable" className="nav-link">Time Table</Link>
               </li>
               <li className="nav-item">
                 <Link to="/drop-course" className="nav-link">Drop Course</Link>

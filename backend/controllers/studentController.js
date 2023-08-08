@@ -152,14 +152,10 @@ const getTimetable = async (req, res) => {
 
 const giveFeedback = async (req, res) => {
   try {
-    const { studentId, teacherId, courseId, rating, comment } = req.body;
+    const { feedbackText } = req.body;
 
     const feedback = new Feedback({
-      studentId,
-      teacherId,
-      courseId,
-      rating,
-      comment,
+      feedbackText,
     });
 
     await feedback.save();

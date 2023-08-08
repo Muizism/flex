@@ -9,10 +9,10 @@ const FeedbackPage = () => {
   const [feedbacks, setFeedbacks] = useState([]);
 
   useEffect(() => {
-    // Fetch all feedbacks for the logged-in student
+   
     const fetchFeedbacks = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/students/getAllFeedbacks');
+        const response = await axios.get('http://localhost:3001/students/show-feedback');
         setFeedbacks(response.data);
       } catch (error) {
         console.error('Error fetching feedbacks:', error);
@@ -26,7 +26,7 @@ const FeedbackPage = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:3001/students/giveFeedback', {
+      const response = await axios.post('http://localhost:3001/students/give-feedback', {
         feedbackText: feedbackText,
       });
       toast.success('Feedback submitted successfully!');

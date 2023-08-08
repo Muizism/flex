@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Table } from 'react-bootstrap';
-import  { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-const ExamsTable = () => {
-  const [exams, setExams] = useState([]);
+const Timetable = () => {
+  const [timetableData, setTimetableData] = useState([]);
 
   useEffect(() => {
-    const fetchExams = async () => {
+    const fetchTimetable = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/students/show-exam');
-        setExams(response.data);
+        const response = await axios.get('http://localhost:3001/students/show-table');
+        setTimetableData(response.data);
       } catch (error) {
-        console.error('Error fetching exams:', error);
+        console.error('Error fetching timetable:', error);
       }
     };
 
-    fetchExams();
+    fetchTimetable();
   }, []);
 
   return (
     <div className="container mt-4">
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+           <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container">
-        <Link to="/home/:studentId" className="navbar-brand">Home</Link>
+      <Link to={`/home/${localStorage.getItem('userId')}`} className="navbar-brand">Home</Link>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
@@ -44,35 +44,39 @@ const ExamsTable = () => {
             <li className="nav-item">
               <Link to="/give-feedback" className="nav-link">Give Feedback</Link>
             </li>
-           
             <li className="nav-item">
-              <Link to="/show-table" className="nav-link">Show Timetable</Link>
+              <Link to="/show-exam" className="nav-link">Show Exams</Link>
             </li>
             <li className="nav-item">
               <Link to="/payment" className="nav-link">Pay Fee</Link>
             </li>
+            
+
+            
             {/* Add other routes/buttons as needed */}
           </ul>
         </div>
       </div>
     </nav>
-      <h2>Exam Information</h2>
+      <h2>Timetable</h2>
       <Table striped bordered hover responsive>
         <thead>
           <tr>
-            <th>Exam Name</th>
+            <th>Department</th>
+            <th>Course Name</th>
+            <th>Section</th>
             <th>Date</th>
             <th>Time</th>
-            <th>Venue</th>
           </tr>
         </thead>
         <tbody>
-          {exams.map((exam) => (
-            <tr key={exam._id}>
-              <td>{exam.examName}</td>
-              <td>{new Date(exam.date).toLocaleDateString()}</td>
-              <td>{exam.time}</td>
-              <td>{exam.venue}</td>
+          {timetableData.map((item) => (
+            <tr key={item._id}>
+              <td>{item.department}</td>
+              <td>{item.courseName}</td>
+              <td>{item.section}</td>
+              <td>{item.date}</td>
+              <td>{item.time}</td>
             </tr>
           ))}
         </tbody>
@@ -81,4 +85,4 @@ const ExamsTable = () => {
   );
 };
 
-export default ExamsTable;
+export default Timetable;

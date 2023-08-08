@@ -84,6 +84,7 @@ const TimetablePage = () => {
  
   const handleUpdate = async (e) => {
     e.preventDefault(); 
+ 
     try {
       await axios.put(`http://localhost:3001/academics/timetable/${selectedEntry._id}`, formData);
       fetchTimetable();
@@ -100,7 +101,8 @@ const TimetablePage = () => {
     <div className="container mt-4">
        <nav className="navbar navbar-expand-lg navbar-light bg-light mb-3">
         <div className="container">
-          <Link to="/academic-home/:academicId" className="navbar-brand">Home</Link>
+        <Link to={`/academic-home/${localStorage.getItem('userId')}`} className="navbar-brand">Home</Link>
+
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>

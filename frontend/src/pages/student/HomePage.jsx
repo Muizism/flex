@@ -38,14 +38,12 @@ const HomePage = () => {
             <li className="nav-item">
               <Link to="/withdraw-course" className="nav-link">Withdraw Course</Link>
             </li>
-            <li className="nav-item">
-              <Link to="/pay-fee" className="nav-link">Pay Fee</Link>
-            </li>
+
             <li className="nav-item">
               <Link to="/check-grades" className="nav-link">Check Grades</Link>
             </li>
             <li className="nav-item">
-              <Link to="/give-feedback" className="nav-link">Give Feedback</Link>
+              <Link to="/feedback" className="nav-link">Give Feedback</Link>
             </li>
             <li className="nav-item">
               <Link to="/show-exam" className="nav-link">Show Exams</Link>

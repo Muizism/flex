@@ -24,7 +24,7 @@ studentRouter.post('/pay-fee', payFee);
 studentRouter.get('/check-grades',auth.VerifyUser, checkGrades);
 studentRouter.get('/show-exam', getAllExams);
 studentRouter.get('/show-table', getTimetable);
-studentRouter.get('/give-feedback', giveFeedback);
+studentRouter.post('/give-feedback', giveFeedback);
 studentRouter.get('/show-feedback', getAllFeedbacks);
 
 studentRouter.get('/students/:id', async (req, res) => {

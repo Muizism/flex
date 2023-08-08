@@ -3,7 +3,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link, useNavigate } from 'react-router-dom';
-
+import Cookies from 'js-cookie';
 function Login() {
   const navigate = useNavigate(); // Initialize the useNavigate hook
 
@@ -17,6 +17,7 @@ function Login() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   }
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Validation checks
@@ -28,9 +29,11 @@ function Login() {
     try {
       const response = await axios.post('http://localhost:3001/academics/academic-login', formData);
       console.log(response.data);
+      localStorage.setItem('userId', response.data.user._id);
+      localStorage.setItem('token', response.data.token);
       setMessage('Successfully logged in!');
       toast.success('Login successful');
-    
+      Cookies.set('token', response.data.token);
       navigate(`/academic-home/${response.data.user._id}`);
 
 
