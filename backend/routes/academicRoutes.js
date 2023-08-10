@@ -30,7 +30,7 @@ academicsRouter.get('/view-exam-schedule',viewExamSchedule);
 academicsRouter.post('/create-exam-schedule', createExamSchedule);
 academicsRouter.put('/update-exam-schedule/:id', updateExamSchedule);
 academicsRouter.delete('/delete-exam-schedule/:id', deleteExamScheduleEntry);
-academicsRouter.get('/academics/:id',auth.VerifyUser, async (req, res) => {
+academicsRouter.get('/academics/:id', async (req, res) => {
   try {
     const academic = await Academic.findById(req.params.id);
     res.json(academic);

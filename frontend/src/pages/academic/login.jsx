@@ -38,7 +38,7 @@ function Login() {
     try {
       const response = await axios.post('http://localhost:3001/academics/academic-login', formData);
       console.log(response.data);
-      localStorage.setItem('AuserId', response.data.user._id);
+      localStorage.setItem('userId', response.data.user._id);
       localStorage.setItem('Atoken', response.data.token);
       setMessage('Successfully logged in!');
       toast.success('Login successful');

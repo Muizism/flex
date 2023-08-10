@@ -15,7 +15,7 @@ const navigate = useNavigate();
   useEffect(() => {
     const fetchAcademicInfo = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/academics/academics/${academicId}`,{headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
+        const response = await axios.get(`http://localhost:3001/academics/academics/${academicId}`);
         setAcademicInfo(response.data);
       } catch (error) {
         console.error('Error fetching academic info:', error);
