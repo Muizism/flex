@@ -6,7 +6,7 @@ const Student = require('../models/student');
 
 const {
 
-  checkAttendance,
+  getAttendance,
   withdrawCourse,
   payFee,
   giveFeedback,
@@ -18,7 +18,7 @@ const {
 } = require('../controllers/studentController');
 
 studentRouter.post('/login',Login);
-studentRouter.get('/check-attendance',auth.VerifyUser, checkAttendance);
+studentRouter.get('/check-attendance',auth.VerifyUser, getAttendance);
 studentRouter.post('/withdraw-course',auth.VerifyUser, withdrawCourse);
 studentRouter.post('/pay-fee', payFee);
 studentRouter.get('/check-grades',auth.VerifyUser, checkGrades);

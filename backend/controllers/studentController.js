@@ -77,6 +77,14 @@ const withdrawCourse = (req, res) => {
   const studentId = req.userId || req.params.studentId;
   const courseIdToRemove = req.body.courseId;
 
+  // Hardcoded list of course IDs
+  const course_ids = ['MATH101', 'SCI201', 'HIST301', 'ENG401'];
+
+  // Check if the courseIdToRemove is in the hardcoded course_ids list
+  if (!course_ids.includes(courseIdToRemove)) {
+    return res.status(404).json({ error: 'Course not found.' });
+  }
+
   Student.findByIdAndUpdate(
     studentId,
     { $pull: { courses: courseIdToRemove } },
@@ -175,10 +183,23 @@ const getAllFeedbacks = async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch feedbacks' });
   }
 };
-
+const getAttendance =  async (req, res) => {
+  const { rollNo } = req.body;
+  console.log(rollNo);
+  try {
+    let result = await Attendance.find(
+      { rollNo: rollNo },
+      { _id: 0, createdAt: 0, updatedAt: 0, __v: 0 }
+    );
+    console.log(result);
+    res.status(200).json(result);
+  } catch (err) {
+    res.json({ status: "error" });
+  }
+};
 module.exports = {
 
-  checkAttendance,
+ getAttendance,
   withdrawCourse,
   payFee,
   getAllExams,

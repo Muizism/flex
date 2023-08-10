@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Table } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import './studentstyles.css';
+import image from './logo.png';
 
 const HomePage = () => {
   const { studentId } = useParams();
   const [studentInfo, setStudentInfo] = useState(null);
-
+  const navigate=useNavigate();
   useEffect(() => {
     const fetchStudentInfo = async () => {
       try {
@@ -18,97 +18,120 @@ const HomePage = () => {
       }
     };
 
-
     fetchStudentInfo();
-  }, [studentId, setStudentInfo]); 
+  }, [studentId, setStudentInfo]);
 
   return (
-    <div className="container mt-5">
-       <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <div className="container">
-        <Link to="/home/:studentId" className="navbar-brand">Home</Link>
-        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav">
-            <li className="nav-item">
-              <Link to="/check-attendance" className="nav-link">Check Attendance</Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/withdraw-course" className="nav-link">Withdraw Course</Link>
-            </li>
-
-            <li className="nav-item">
-              <Link to="/check-grades" className="nav-link">Check Grades</Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/feedback" className="nav-link">Give Feedback</Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/show-exam" className="nav-link">Show Exams</Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/show-table" className="nav-link">Show Timetable</Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/payment" className="nav-link">Pay Fee</Link>
-            </li>
-            {/* Add other routes/buttons as needed */}
-          </ul>
+    <div className='body'>
+      <nav className="navbar navbar-expand-lg navbar-light bg-light gradient-background bgcolor">
+        <div className="container">
+          <Link to="/academic-home/:academicId" className="navbar-brand">
+            <img src={image} alt="Logo" width="150" height="150" />
+          </Link>
+          <div className="ml-auto">
+            <ul className="navbar-nav">
+              <li className="nav-item">
+                <Link to="/show-table" className="nav-link white-bold">Time Table</Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/show-exam" className="nav-link white-bold">Exam Schedule</Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/check-attendance" className="nav-link white-bold">Attendance</Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/withdraw-course" className="nav-link white-bold">Withdraw Course</Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/feedback" className="nav-link white-bold">Feedback</Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/payment" className="nav-link white-bold">Pay Fee</Link>
+              </li>
+              <li className="nav-item">
+                <button className="btn btn-danger" onClick={()=>{
+                  localStorage.removeItem("token");
+                  localStorage.removeItem("userId")
+                  navigate("/");
+                }}>Logout</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div className="welcome-card">
+        <h2 className="text-center">Welcome to the Student Home Page</h2>
+      </div>
+      <div className="container mt-4">
+        <div className="profile-card">
+          <div className="card-body">
+            <div className="profile-info">
+              <img src={image} alt="Profile" className="profile-image" />
+              {studentInfo ? (
+                <div>
+                  <p className="card-text">
+                    <strong>Roll Number:</strong> {studentInfo.rollNo}
+                  </p>
+                  <p className="card-text">
+                    <strong>Name:</strong> {studentInfo.studentName}
+                  </p>
+                  <p className="card-text">
+                    <strong>Batch:</strong> {studentInfo.batch}
+                  </p>
+                  <p className="card-text">
+                    <strong>CGPA:</strong> {studentInfo.CGPA}
+                  </p>
+                  <p className="card-text">
+                    <strong>Semester:</strong> {studentInfo.semester}
+                  </p>
+                  <p className="card-text">
+                    <strong>Degree:</strong> {studentInfo.degree}
+                  </p>
+                  <p className="card-text">
+                    <strong>Section:</strong> {studentInfo.section}
+                  </p>
+                  <p className="card-text">
+                    <strong>Status:</strong> {studentInfo.status}
+                  </p>
+                  <p className="card-text">
+                    <strong>Phone:</strong> {studentInfo.phone}
+                  </p>
+                  <p className="card-text">
+                    <strong>Gender:</strong> {studentInfo.gender}
+                  </p>
+                  <p className="card-text">
+                    <strong>Email:</strong> {studentInfo.email}
+                  </p>
+                  <p className="card-text">
+                    <strong>Guardian:</strong> {studentInfo.guardian}
+                  </p>
+                </div>
+              ) : (
+                <p>Loading student information...</p>
+              )}
+            </div>
+          </div>
         </div>
       </div>
-    </nav>
-    <h2 className="text-center">Welcome to the Home Page</h2>
-    <div className="card mt-3">
-      <div className="card-body">
-        {studentInfo ? (
-          <div>
-            <p className="card-text">
-              <strong>Roll Number:</strong> {studentInfo.rollNo}
-            </p>
-            <p className="card-text">
-              <strong>Name:</strong> {studentInfo.studentName}
-            </p>
-            <p className="card-text">
-              <strong>Batch:</strong> {studentInfo.batch}
-            </p>
-            <p className="card-text">
-              <strong>CGPA:</strong> {studentInfo.CGPA}
-            </p>
-            <p className="card-text">
-              <strong>Semester:</strong> {studentInfo.semester}
-            </p>
-            <p className="card-text">
-              <strong>Degree:</strong> {studentInfo.degree}
-            </p>
-            <p className="card-text">
-              <strong>Section:</strong> {studentInfo.section}
-            </p>
-            <p className="card-text">
-              <strong>Status:</strong> {studentInfo.status}
-            </p>
-            <p className="card-text">
-              <strong>Phone:</strong> {studentInfo.phone}
-            </p>
-            <p className="card-text">
-              <strong>Gender:</strong> {studentInfo.gender}
-            </p>
-            <p className="card-text">
-              <strong>Email:</strong> {studentInfo.email}
-            </p>
-            <p className="card-text">
-              <strong>Guardian:</strong> {studentInfo.guardian}
-            </p>
+      <footer className='footer'>
+        <div className="footer-content">
+          <div className="footer-title">Connect with us</div>
+          <div className="social-icons">
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+              <i className="fab fa-facebook"></i>
+            </a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+              <i className="fab fa-twitter"></i>
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+              <i className="fab fa-instagram"></i>
+            </a>
+            {/* Add more social media links and icons as needed */}
           </div>
-        ) : (
-          <p>Loading student information...</p>
-        )}
-      </div>
+        </div>
+      </footer>
     </div>
-  </div>
-  
-);
+  );
 };
 
 export default HomePage;

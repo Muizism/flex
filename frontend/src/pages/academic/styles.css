@@ -1,0 +1,165 @@
+/* styles.css */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa; /* Light background color */
+}
+
+.container-fluid {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content horizontally */
+  justify-content: center; /* Center content vertically */
+  min-height: 100vh;
+}
+
+.welcome-card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  background-color: #fff; /* White background for the card */
+  margin-top: 0; /* No margin between navbar and welcome card */
+}
+
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.profile-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px; /* Add a little spacing between profile image and info card */
+}
+
+.profile-card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  background-color: #fff; /* White background for the card */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 250px;
+}
+.navbar {
+  position: fixed; /* Make the navbar fixed */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* Ensure the navbar is above other content */
+}
+
+.gradient-background {
+  background: linear-gradient(to bottom right, #800000, #990000);
+  padding: 10px; /* Add padding for content */
+}
+
+.navbar-nav .nav-link {
+  color: white;
+  font-weight: lighter;
+  font-family: 'Raleway', sans-serif;
+}
+
+/* Adjust spacing of the logout button */
+.navbar-nav .btn-danger {
+  margin-left: auto;
+}
+
+.changesection{
+  margin-top: 100px;
+}
+.row{
+  margin-top: 100px;
+}
+.register{
+  margin-top: 100px;
+}
+/* styles.css */
+
+/* ... your existing CSS rules ... */
+
+/* Sexy footer styles */
+footer {
+  background-color: #550000;
+  color: white;
+  padding: 20px 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height:90px;
+}
+/* styles.css */
+/* ... (existing CSS rules) ... */
+
+/* Media query for screens up to 768px width (typical tablet and mobile sizes) */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 5px; /* Adjust padding for smaller screens */
+  }
+
+  .navbar-toggler {
+    display: block; /* Show the menu toggle button on smaller screens */
+  }
+
+  .navbar-collapse {
+    display: none; /* Hide the navigation links by default */
+    background-color: #800000; /* Maroon color for the collapsed menu background */
+  }
+
+  .navbar-nav {
+    flex-direction: column;
+    text-align: center;
+    padding: 10px 0; /* Add padding between links */
+  }
+
+  .navbar-nav .nav-link {
+    margin: 5px 0; /* Adjust margin between links */
+  }
+
+  .navbar.show .navbar-collapse {
+    display: block; /* Show the collapsed menu when toggled */
+  }
+}
+
+/* ... (existing CSS rules) ... */
+
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer-title {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  color: #f8f9fa;
+}
+
+.social-icons a {
+  color: white;
+  margin: 0 10px;
+  font-size: 24px;
+  transition: color 0.3s ease-in-out;
+}
+
+.social-icons a:hover {
+  color: #ff6b6b;
+}

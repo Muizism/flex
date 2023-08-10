@@ -60,7 +60,9 @@ let VerifyUser = (req, res, next) => {
           }
           else {
               //res.status(200).json({ "Success": true, "Message": "Token is valid" });
+              req.decoded = decoded;
               next();
+              
           }
       });
   }

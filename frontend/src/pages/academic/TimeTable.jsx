@@ -3,6 +3,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from 'react-router-dom';
+import image from './logo.png';
 
 const TimetablePage = () => {
   const [timetable, setTimetable] = useState([]);
@@ -98,34 +99,35 @@ const TimetablePage = () => {
   };
 
   return (
-    <div className="container mt-4">
-       <nav className="navbar navbar-expand-lg navbar-light bg-light mb-3">
+    <div >
+      <nav className="navbar navbar-expand-lg navbar-light bg-light gradient-background">
         <div className="container">
-        <Link to={`/academic-home/${localStorage.getItem('userId')}`} className="navbar-brand">Home</Link>
-
-          <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarNav">
+        <Link to={`/academic-home/${localStorage.getItem('userId')}`} className="navbar-brand">
+            <img src={image} alt="Logo" width="150" height="150" />
+          </Link>
+          <div className="ml-auto">
             <ul className="navbar-nav">
               <li className="nav-item">
-                <Link to="/change-section" className="nav-link">Change Section</Link>
+                <Link to="/change-section" className="nav-link white-bold">Change Section</Link>
               </li>
               <li className="nav-item">
-                <Link to="/register-course" className="nav-link">Register Course</Link>
+                <Link to="/register-course" className="nav-link white-bold">Register Course</Link>
               </li>
               <li className="nav-item">
-                <Link to="/exam-schedule" className="nav-link">Exam Schedule</Link>
+                <Link to="/exam-schedule" className="nav-link white-bold">Exam Schedule</Link>
               </li>
               <li className="nav-item">
-                <Link to="/drop-course" className="nav-link">Drop Course</Link>
+                <Link to="/drop-course" className="nav-link white-bold">Drop Course</Link>
               </li>
-        
+             
+              <li className="nav-item">
+                <button className="btn btn-danger">Logout</button>
+              </li>
             </ul>
           </div>
         </div>
       </nav>
-  <div className="row">
+  <div className="row" >
     <div className="col-md-6">
       <h2>{selectedEntry ? 'Edit Timetable Entry' : 'Create Timetable Entry'}</h2>
       <form onSubmit={selectedEntry ? handleUpdate : handleCreate}>
@@ -198,6 +200,23 @@ const TimetablePage = () => {
     </div>
   </div>
   <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar />
+  <footer>
+  <div className="footer-content">
+    <div className="footer-title">Connect with us</div>
+    <div className="social-icons">
+      <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+        <i className="fab fa-facebook"></i>
+      </a>
+      <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+        <i className="fab fa-twitter"></i>
+      </a>
+      <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+        <i className="fab fa-instagram"></i>
+      </a>
+      {/* Add more social media links and icons as needed */}
+    </div>
+  </div>
+</footer>
 </div>
 
   );

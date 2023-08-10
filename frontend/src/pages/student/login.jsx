@@ -1,10 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function Login() {
+function Login({login}) {
+  console.log(login);
+  useEffect(() => {
+   
+    if(login){
+      navigate(`/home/${localStorage.getItem('userId')}`)
+    }
+  }, []);
+  
+
   const navigate = useNavigate(); 
   const [formData, setFormData] = useState({
     email: '',
@@ -28,6 +37,7 @@ function Login() {
       const response = await axios.post('http://localhost:3001/students/login', formData);
       console.log(response.data);
       localStorage.setItem('userId', response.data.user._id);
+      localStorage.setItem('token', response.data.token);
       setMessage('Successfully logged in!');
       toast.success('Login successful'); // Show success toast on successful login
 
