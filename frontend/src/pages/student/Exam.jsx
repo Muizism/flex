@@ -10,7 +10,7 @@ const ExamsTable = () => {
   useEffect(() => {
     const fetchExams = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/students/show-exam');
+        const response = await axios.get('http://localhost:3001/students/show-exam',{headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
         setExams(response.data);
       } catch (error) {
         console.error('Error fetching exams:', error);
@@ -22,7 +22,7 @@ const ExamsTable = () => {
 
   return (
     <div >
-        <nav className="navbar navbar-expand-lg navbar-light bg-light gradient-background">
+        <nav className="navbar navbar-expand-lg ">
         <div className="container">
         <Link to={`/home/${localStorage.getItem('userId')}`} className="navbar-brand">
             <img src={image} alt="Logo" width="150" height="150" />

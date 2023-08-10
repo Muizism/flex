@@ -14,7 +14,7 @@ const WithdrawCourse = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:3001/academics/withdraw-course', {
+      const response = await axios.post('http://localhost:3001/academics/withdraw-course',{headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }}, {
         studentId: rollNo,
         courseId: courseId,
       });
@@ -32,7 +32,7 @@ const WithdrawCourse = () => {
 
   return (
     <div>
-     <nav className="navbar navbar-expand-lg navbar-light bg-light gradient-background">
+     <nav className="navbar navbar-expand-lg ">
         <div className="container">
         <Link to={`/home/${localStorage.getItem('userId')}`} className="navbar-brand">
             <img src={image} alt="Logo" width="150" height="150" />

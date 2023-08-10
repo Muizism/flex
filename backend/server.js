@@ -24,6 +24,9 @@ mongoose
 app.use('/academics', academicsRoutes);
 app.use('/students', studentRoutes);
 app.use('/admin', adminRoutes);
+app.get('/logout', (req, res) => {
+  res.redirect('/');
+});
 
 
   const PORT = 3001;

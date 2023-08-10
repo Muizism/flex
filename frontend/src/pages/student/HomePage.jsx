@@ -8,10 +8,16 @@ const HomePage = () => {
   const { studentId } = useParams();
   const [studentInfo, setStudentInfo] = useState(null);
   const navigate=useNavigate();
+  const handleLogout = () => {
+    console.log("btn clicked");
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    axios.get("http://localhost:3001/logout").then((response) => {
+  })};
   useEffect(() => {
     const fetchStudentInfo = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/students/students/${studentId}`);
+        const response = await axios.get(`http://localhost:3001/students/students/${studentId}`,{headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
         setStudentInfo(response.data);
       } catch (error) {
         console.error('Error fetching academic info:', error);
@@ -23,9 +29,9 @@ const HomePage = () => {
 
   return (
     <div className='body'>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light gradient-background bgcolor">
+      <nav className="navbar navbar-expand-lg  ">
         <div className="container">
-          <Link to="/academic-home/:academicId" className="navbar-brand">
+        <Link to={`/home/${localStorage.getItem('userId')}`} className="navbar-brand">
             <img src={image} alt="Logo" width="150" height="150" />
           </Link>
           <div className="ml-auto">
@@ -49,11 +55,7 @@ const HomePage = () => {
                 <Link to="/payment" className="nav-link white-bold">Pay Fee</Link>
               </li>
               <li className="nav-item">
-                <button className="btn btn-danger" onClick={()=>{
-                  localStorage.removeItem("token");
-                  localStorage.removeItem("userId")
-                  navigate("/");
-                }}>Logout</button>
+                <button className="btn btn-danger" onClick={handleLogout}>Logout</button>
               </li>
             </ul>
           </div>

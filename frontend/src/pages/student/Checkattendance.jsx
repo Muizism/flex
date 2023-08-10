@@ -16,7 +16,7 @@ const AttendancePage = () => {
 
   const handleGetAttendance = async () => {
     try {
-      const response = await axios.post('http://localhost:3001/students/getAttendance', { rollNo });
+      const response = await axios.post('http://localhost:3001/students/getAttendance', { rollNo },{headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
       setAttendanceRecords(response.data);
     } catch (error) {
       console.error(error);
@@ -26,7 +26,7 @@ const AttendancePage = () => {
 
   return (
  
-        <div> <nav className="navbar navbar-expand-lg navbar-light bg-light gradient-background">
+        <div> <nav className="navbar navbar-expand-lg ">
         <div className="container">
         <Link to={`/home/${localStorage.getItem('userId')}`} className="navbar-brand">
             <img src={image} alt="Logo" width="150" height="150" />

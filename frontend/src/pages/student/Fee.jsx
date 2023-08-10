@@ -26,7 +26,7 @@ const FeePayment = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:3001/students/pay-fee', formData);
+      const response = await axios.post('http://localhost:3001/students/pay-fee', formData,{headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
       const { clientSecret } = response.data;
 
       const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
@@ -56,7 +56,7 @@ const FeePayment = () => {
   return (
 
       <div>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light gradient-background">
+      <nav className="navbar navbar-expand-lg ">
         <div className="container">
         <Link to={`/home/${localStorage.getItem('userId')}`} className="navbar-brand">
             <img src={image} alt="Logo" width="150" height="150" />

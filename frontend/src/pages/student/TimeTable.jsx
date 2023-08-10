@@ -9,7 +9,7 @@ const Timetable = () => {
   useEffect(() => {
     const fetchTimetable = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/students/show-table');
+        const response = await axios.get('http://localhost:3001/students/show-table',{headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
         setTimetableData(response.data);
       } catch (error) {
         console.error('Error fetching timetable:', error);
@@ -21,7 +21,7 @@ const Timetable = () => {
 
   return (
     <div>
-            <nav className="navbar navbar-expand-lg navbar-light bg-light gradient-background">
+            <nav className="navbar navbar-expand-lg ">
         <div className="container">
         <Link to={`/home/${localStorage.getItem('userId')}`} className="navbar-brand">
             <img src={image} alt="Logo" width="150" height="150" />

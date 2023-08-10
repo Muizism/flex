@@ -44,7 +44,7 @@ const FeedbackPage = () => {
 
   return (
    
-      <div>  <nav className="navbar navbar-expand-lg navbar-light bg-light gradient-background">
+      <div>  <nav className="navbar navbar-expand-lg ">
         <div className="container">
         <Link to={`/home/${localStorage.getItem('userId')}`} className="navbar-brand">
             <img src={image} alt="Logo" width="150" height="150" />
